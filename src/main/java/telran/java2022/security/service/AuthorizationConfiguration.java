@@ -29,11 +29,19 @@ public class AuthorizationConfiguration {
 		.access("#author == authentication.name")
 		.mvcMatchers(HttpMethod.PUT, "forum/post/{id}/comment/{author}/**")
 		.access("#author == authentication.name")
+		.mvcMatchers(HttpMethod.PUT, "forum/post/{id}/like/**")
+		.authenticated()
 		.mvcMatchers(HttpMethod.PUT, "forum/post/{id}/**")
 		.access("@customWebSecurity.checkPostAuthor(#id, authentication.name)")
 		.mvcMatchers(HttpMethod.DELETE, "forum/post/{id}/**")
 		.access("@customWebSecurity.checkPostAuthor(#id, authentication.name) or hasRole('MODERATOR')")
-		.anyRequest().authenticated());
+		.mvcMatchers("/account/password")
+		.authenticated()
+		.mvcMatchers("/account/**", "/forum/**")
+		.access("@customWebSecurity.checkPasswordExpiration(authentication.name)")
+		.anyRequest().authenticated()
+		
+		);
 	return http.build();
     }
 }
