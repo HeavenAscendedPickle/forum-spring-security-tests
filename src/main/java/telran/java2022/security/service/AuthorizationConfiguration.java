@@ -39,8 +39,7 @@ public class AuthorizationConfiguration {
 		.authenticated()
 		.mvcMatchers("/account/**", "/forum/**")
 		.access("@customWebSecurity.checkPasswordExpiration(authentication.name)")
-		.anyRequest().authenticated()
-		
+		.anyRequest().authenticated()		
 		);
 	return http.build();
     }
